@@ -1,0 +1,27 @@
+Provincie:
+0  - Limburg
+1  - Flevoland
+2  - Utrecht
+3  - Gelderland
+4  - Noord-Brabant
+5  - Overijssel
+6  - Zuid-Holland
+7  - Noord-Holland
+8  - Zeeland
+9  - Friesland
+10 - Drenthe
+11 - Groningen
+
+Constellation:
+0  - Cancer
+1  - Libra
+2  - Taurus
+3  - Gemini
+4  - Aries
+5  - Aquarius
+6  - Leo
+7  - Virgo
+8  - Capricorn
+9  - Pisces
+10 - Sagittarius
+11 - Scorpio
