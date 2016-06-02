@@ -2,57 +2,50 @@ package main
 
 import (
 	"fmt"
+	"reflect"
+	"math/rand"
+	"time"
 
-	//"github.com/cdipaolo/goml/cluster"
-	"github.com/sjwhitworth/golearn/base"
-
-	//"reflect"
-	//"github.com/sjwhitworth/golearn/knn"
-	//"github.com/sjwhitworth/golearn/evaluation"
-
+	"github.com/cdipaolo/goml/base"
+	"github.com/cdipaolo/goml/cluster"
 )
 
 
 func main() {
 
-	// https://github.com/cdipaolo/goml
-
 	fmt.Println("Starting..")
 
-	rawData, err := base.ParseCSVToInstances("fakenames3k.csv", true)
+	// Load the data
+	data, data1d, err := base.LoadDataFromCSV("fakenames3k_slimcollumns_numeric_noheader.csv")
 	if err != nil {
 		panic(err)
 	}
 
-	as := base.ResolveAttributes(rawData, rawData.AllAttributes())
-	fmt.Println(as)
+	// Set the random seed to use random shuffling
+	rand.Seed(time.Now().UTC().UnixNano())
+	// Shuffle the data
+	for i := range data {
+		j := rand.Intn(i + 1)
+		data[i], data[j] = data[j], data[i]
+	}
 
-	//trainData, testData := base.InstancesTrainTestSplit(rawData, 0.50)
+	fmt.Println(reflect.TypeOf(data1d))
 
+	// Start KMeans.
+	kmeans := cluster.NewKMeans(5, 20, data)
 
+	// Let the model learn the data and determine the clusters
+	if kmeans.Learn() != nil {
+		panic("The model hasn't learned.. there is something wrong")
+	}
 
+	// Get the clustering result from the data.
+	fmt.Println(kmeans.Guesses())
 
-
-	//
-	//cls := knn.NewKnnClassifier("euclidean", 2)
-	//cls.Fit(trainData)
-
-	//
-	//predictions := cls.Predict(testData)
-	//fmt.Println(predictions)
-
-	//confusionMat, err := evaluation.GetConfusionMatrix(testData, predictions)
-	//if err != nil {
-	//	panic(fmt.Sprintf("Unable to get confusion matrix: %s", err.Error()))
-	//}
-	//fmt.Println(evaluation.GetSummary(confusionMat))
-
-	//rawData := base.ParseCSVGetAttributes("fakenames3k.csv", true)
-
-	//model := cluster.NewTriangleKMeans(2, 30, rawData)
-	//if model.Learn() != nil {
-	//	panic("OH NO")
-	//}
-
+	// Concat the clusters to the actual data -> can be used in plots
+	err = kmeans.SaveClusteredData("clustered.csv")
+	if err != nil {
+		panic(err)
+	}
 
 }
