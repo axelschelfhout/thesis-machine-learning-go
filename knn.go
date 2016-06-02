@@ -6,6 +6,7 @@ import (
 	"github.com/sjwhitworth/golearn/knn"
 	"github.com/sjwhitworth/golearn/evaluation"
 	"math/rand"
+	"time"
 )
 
 func main() {
@@ -15,8 +16,8 @@ func main() {
 		panic(err)
 	}
 
-	// Set random seed for randomasation.
-	rand.Seed(1337)
+	// Set random seed for randomisation.
+	rand.Seed(time.Now().UTC().UnixNano())
 
 	// Split the data up in Train en Test set. The divide param is the size of the Test set.
 	shuffledData := base.Shuffle(rawData) // First shuffle the set so
