@@ -31,7 +31,7 @@ func main() {
 
 	fmt.Println(reflect.TypeOf(data1d))
 
-	// Start KMeans.
+	// Start KMeans. (with k amount of clusters, x amount of iterations to run, and the dataset
 	kmeans := cluster.NewKMeans(5, 20, data)
 
 	// Let the model learn the data and determine the clusters

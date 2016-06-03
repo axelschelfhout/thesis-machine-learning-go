@@ -21,7 +21,7 @@ func main() {
 
 	// Split the data up in Train en Test set. The divide param is the size of the Test set.
 	shuffledData := base.Shuffle(rawData) // First shuffle the set so
-	trainData, testData := base.InstancesTrainTestSplit(shuffledData, 0.21)
+	trainData, testData := base.InstancesTrainTestSplit(shuffledData, 0.25)
 
 	// Create new Classifier
 	cls := knn.NewKnnClassifier("euclidean", 5)
@@ -32,7 +32,7 @@ func main() {
 	// Predictions made on basis of the fitted data
 	predictions := cls.Predict(testData)
 
-	// Now compare our actual test data to the predictioned data.
+	// Now compare our actual test data to the predicted data.
 	confusionMat, err := evaluation.GetConfusionMatrix(testData, predictions)
 	if err != nil {
 		panic(err)
