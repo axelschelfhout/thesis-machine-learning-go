@@ -7,6 +7,7 @@ import (
 	"github.com/sjwhitworth/golearn/evaluation"
 	"math/rand"
 	"time"
+	"github.com/gonum/floats"
 )
 
 func runmultipleknn(data base.FixedDataGrid, iterations int) ([]float64) {
@@ -54,7 +55,7 @@ func main() {
 	rand.Seed(time.Now().UTC().UnixNano())
 
 	// Split the data up in Train en Test set. The divide param is the size of the Test set.
-	shuffledData := base.Shuffle(rawData) // First shuffle the set so
+	shuffledData := base.Shuffle(rawData) // First shuffle the set so its random everytime we run the algoritm.
 	trainData, testData := base.InstancesTrainTestSplit(shuffledData, 0.3)
 
 	// Create new Classifier
@@ -64,18 +65,21 @@ func main() {
 
 	// Predictions made on basis of the fitted data
 	predictions := cls.Predict(testData)
-
 	// Now compare our actual test data to the predicted data.
 	confusionMat, err := evaluation.GetConfusionMatrix(testData, predictions)
+
 	if err != nil {
 		panic(err)
 	}
 
 	// See the accuracy of our model.
 	fmt.Println(evaluation.GetSummary(confusionMat))
-
+	fmt.Println(evaluation.GetAccuracy(confusionMat))
 	// Run it multiple times to see if it's correct. (cross validation)
-	fmt.Println(runmultipleknn(rawData, 10))
+
+	cross_val := runmultipleknn(rawData, 10)
+	fmt.Println(cross_val)
+	fmt.Println(floats.Sum(cross_val)/ 10)
 
 
 }

@@ -16,7 +16,7 @@ func main() {
 	fmt.Println("Starting..")
 
 	// Load the data
-	data, data1d, err := base.LoadDataFromCSV("fakenames3k_slimcollumns_numeric_noheader.csv")
+	data, _, err := base.LoadDataFromCSV("fakenames3k_slimcollumns_numeric_noheader.csv")
 	if err != nil {
 		panic(err)
 	}
@@ -29,10 +29,8 @@ func main() {
 		data[i], data[j] = data[j], data[i]
 	}
 
-	fmt.Println(reflect.TypeOf(data1d))
-
 	// Start KMeans. (with k amount of clusters, x amount of iterations to run, and the dataset
-	kmeans := cluster.NewKMeans(5, 20, data)
+	kmeans := cluster.NewKMeans(6, 20, data)
 
 	// Let the model learn the data and determine the clusters
 	if kmeans.Learn() != nil {
@@ -42,7 +40,7 @@ func main() {
 	// Get the clustering result from the data.
 	fmt.Println(kmeans.Guesses())
 
-	// Concat the clusters to the actual data -> can be used in plots
+	// Concat the clusters to the actual data -> can be used in plots or in supervised algorithms
 	err = kmeans.SaveClusteredData("clustered.csv")
 	if err != nil {
 		panic(err)
